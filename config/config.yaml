@@ -1,0 +1,8 @@
+backend:
+    elasticsearch:
+        exporter: exporters.ElasticSearchExporter
+        options:
+            url: 127.0.0.1:9200
+autothrottle:
+    enabled: True
+    debug: False

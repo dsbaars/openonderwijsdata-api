@@ -11,7 +11,7 @@ USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
 
 # Autothrottling settings
 AUTOTHROTTLE_ENABLED = True
-AUTOTHROTTLE_DEBUG = True
+AUTOTHROTTLE_DEBUG = False
 
 # Full filesystem path to the project
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))

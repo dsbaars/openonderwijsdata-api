@@ -2027,18 +2027,20 @@ class DuoPoSchoolsSpider(DuoSpider):
     def __init__(self, *args, **kwargs):
         self.make_item = lambda (brin): DuoPoSchool(brin=brin)
         self.requests = {
-            'po/adressen/Adressen/hoofdvestigingen.asp':
+            # 'po/adressen/Adressen/hoofdvestigingen.asp':
+            #     self.parse_po_schools,
+            'po/adressen/Adressen/speciaal.asp':
                 self.parse_po_schools,
-            'po/Leerlingen/Leerlingen/po_leerlingen4.asp':
-                self.parse_spo_students_per_cluster,
-            'passendow/Adressen/Adressen/passend_po_2.asp':
-                self.parse_po_lo_collaboration,
-            'passendow/Adressen/Adressen/passend_po_4.asp':
-                self.parse_pao_collaboration,
-            'po/Onderwijspersoneel/Personeel/po_personeel_personen.asp':
-                self.parse_po_staff_people,
-            'po/Onderwijspersoneel/Personeel/po_personeel_fte.asp':
-                self.parse_po_staff_fte,
+            # 'po/Leerlingen/Leerlingen/po_leerlingen4.asp':
+            #     self.parse_spo_students_per_cluster,
+            # 'passendow/Adressen/Adressen/passend_po_2.asp':
+            #     self.parse_po_lo_collaboration,
+            # 'passendow/Adressen/Adressen/passend_po_4.asp':
+            #     self.parse_pao_collaboration,
+            # 'po/Onderwijspersoneel/Personeel/po_personeel_personen.asp':
+            #     self.parse_po_staff_people,
+            # 'po/Onderwijspersoneel/Personeel/po_personeel_fte.asp':
+            #     self.parse_po_staff_fte,
         }
         DuoSpider.__init__(self, *args, **kwargs)
 
@@ -2224,28 +2226,30 @@ class DuoPoBranchesSpider(DuoSpider):
     def __init__(self, *args, **kwargs):
         self.make_item = lambda ((brin, board_id)): DuoPoBranch(brin=brin, board_id=board_id)
         self.requests = {
-            'po/adressen/Adressen/vest_bo.asp':
+            # 'po/adressen/Adressen/vest_bo.asp':
+            #     self.parse_po_branches,
+            'po/adressen/Adressen/vest_sbo.asp':
                 self.parse_po_branches,
-            'po/Leerlingen/Leerlingen/po_leerlingen1.asp':
-                self.parse_po_student_weight,
-            'po/Leerlingen/Leerlingen/po_leerlingen3.asp':
-                self.parse_po_student_age,
-            'po/Leerlingen/Leerlingen/po_leerlingen9.asp':
-                self.parse_po_born_outside_nl,
-            'po/Leerlingen/Leerlingen/po_leerlingen11.asp':
-                self.parse_po_pupil_zipcode_by_age,
-            'po/Leerlingen/Leerlingen/leerjaar.asp':
-                self.parse_po_student_year,
-            'po/Leerlingen/Leerlingen/po_leerlingen5.asp':
-                self.parse_spo_students_by_birthyear,
-            'po/Leerlingen/Leerlingen/po_leerlingen6.asp':
-                self.parse_spo_students_by_edu_type,
-            'po/Leerlingen/Leerlingen/Schooladvies.asp':
-                self.parse_po_students_by_advice,
-            'po/Leerlingen/Leerlingen/po_leerlingen26-10.asp':
-                self.parse_po_students_in_BRON,
-            'Stroom/doorstromers/doorstromers/po_vo.asp':
-                self.parse_po_student_flow,
+            # 'po/Leerlingen/Leerlingen/po_leerlingen1.asp':
+            #     self.parse_po_student_weight,
+            # 'po/Leerlingen/Leerlingen/po_leerlingen3.asp':
+            #     self.parse_po_student_age,
+            # 'po/Leerlingen/Leerlingen/po_leerlingen9.asp':
+            #     self.parse_po_born_outside_nl,
+            # 'po/Leerlingen/Leerlingen/po_leerlingen11.asp':
+            #     self.parse_po_pupil_zipcode_by_age,
+            # 'po/Leerlingen/Leerlingen/leerjaar.asp':
+            #     self.parse_po_student_year,
+            # 'po/Leerlingen/Leerlingen/po_leerlingen5.asp':
+            #     self.parse_spo_students_by_birthyear,
+            # 'po/Leerlingen/Leerlingen/po_leerlingen6.asp':
+            #     self.parse_spo_students_by_edu_type,
+            # 'po/Leerlingen/Leerlingen/Schooladvies.asp':
+            #     self.parse_po_students_by_advice,
+            # 'po/Leerlingen/Leerlingen/po_leerlingen26-10.asp':
+            #     self.parse_po_students_in_BRON,
+            # 'Stroom/doorstromers/doorstromers/po_vo.asp':
+            #     self.parse_po_student_flow,
         }
         DuoSpider.__init__(self, *args, **kwargs)
 
@@ -2265,6 +2269,7 @@ class DuoPoBranchesSpider(DuoSpider):
                 if row.has_key('VESTIGINGSNAAM '):
                     row['VESTIGINGSNAAM'] = row['VESTIGINGSNAAM ']
 
+                print row['BRIN NUMMER'] + "\r\n"
                 school['reference_year'] = reference_year
                 school['ignore_id_fields'] = ['reference_year']
                 school['name'] = row['VESTIGINGSNAAM'].strip()
@@ -2283,10 +2288,10 @@ class DuoPoBranchesSpider(DuoSpider):
 
                 school['board_id'] = int_or_none(row['BEVOEGD GEZAG NUMMER'].strip())
 
-                if row['BRIN NUMMER'].strip():
+                if row.has_key('BRIN NUMMER'):
                     school['brin'] = row['BRIN NUMMER'].strip()
 
-                if row['VESTIGINGSNUMMER'].strip():
+                if row.has_key('VESTIGINGSNUMMER') and row.has_key('BRIN NUMMER'):
                     school['branch_id'] = int(row['VESTIGINGSNUMMER']
                                               .strip()
                                               .replace(row['BRIN NUMMER'], ''))
