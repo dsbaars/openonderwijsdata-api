@@ -2,6 +2,7 @@ import csv
 import cStringIO
 import locale
 import xlrd
+
 from datetime import datetime
 from os import devnull
 from os.path import basename
@@ -2226,30 +2227,30 @@ class DuoPoBranchesSpider(DuoSpider):
     def __init__(self, *args, **kwargs):
         self.make_item = lambda ((brin, board_id)): DuoPoBranch(brin=brin, board_id=board_id)
         self.requests = {
-            # 'po/adressen/Adressen/vest_bo.asp':
-            #     self.parse_po_branches,
+            'po/adressen/Adressen/vest_bo.asp':
+                self.parse_po_branches,
             'po/adressen/Adressen/vest_sbo.asp':
                 self.parse_po_branches,
-            # 'po/Leerlingen/Leerlingen/po_leerlingen1.asp':
-            #     self.parse_po_student_weight,
-            # 'po/Leerlingen/Leerlingen/po_leerlingen3.asp':
-            #     self.parse_po_student_age,
-            # 'po/Leerlingen/Leerlingen/po_leerlingen9.asp':
-            #     self.parse_po_born_outside_nl,
-            # 'po/Leerlingen/Leerlingen/po_leerlingen11.asp':
-            #     self.parse_po_pupil_zipcode_by_age,
-            # 'po/Leerlingen/Leerlingen/leerjaar.asp':
-            #     self.parse_po_student_year,
-            # 'po/Leerlingen/Leerlingen/po_leerlingen5.asp':
-            #     self.parse_spo_students_by_birthyear,
-            # 'po/Leerlingen/Leerlingen/po_leerlingen6.asp':
-            #     self.parse_spo_students_by_edu_type,
-            # 'po/Leerlingen/Leerlingen/Schooladvies.asp':
-            #     self.parse_po_students_by_advice,
-            # 'po/Leerlingen/Leerlingen/po_leerlingen26-10.asp':
-            #     self.parse_po_students_in_BRON,
-            # 'Stroom/doorstromers/doorstromers/po_vo.asp':
-            #     self.parse_po_student_flow,
+            'po/Leerlingen/Leerlingen/po_leerlingen1.asp':
+                self.parse_po_student_weight,
+            'po/Leerlingen/Leerlingen/po_leerlingen3.asp':
+                self.parse_po_student_age,
+            'po/Leerlingen/Leerlingen/po_leerlingen9.asp':
+                self.parse_po_born_outside_nl,
+            'po/Leerlingen/Leerlingen/po_leerlingen11.asp':
+                self.parse_po_pupil_zipcode_by_age,
+            'po/Leerlingen/Leerlingen/leerjaar.asp':
+                self.parse_po_student_year,
+            'po/Leerlingen/Leerlingen/po_leerlingen5.asp':
+                self.parse_spo_students_by_birthyear,
+            'po/Leerlingen/Leerlingen/po_leerlingen6.asp':
+                self.parse_spo_students_by_edu_type,
+            'po/Leerlingen/Leerlingen/Schooladvies.asp':
+                self.parse_po_students_by_advice,
+            'po/Leerlingen/Leerlingen/po_leerlingen26-10.asp':
+                self.parse_po_students_in_BRON,
+            'Stroom/doorstromers/doorstromers/po_vo.asp':
+                self.parse_po_student_flow,
         }
         DuoSpider.__init__(self, *args, **kwargs)
 
@@ -2257,6 +2258,7 @@ class DuoPoBranchesSpider(DuoSpider):
         """
         Primair onderwijs > Adressen
         Parse "03. Alle vestigingen basisonderwijs"
+        Parse "04. Alle vestigingen speciaal (basis)onderwijs"
         """
 
         for csv_url, reference_date in find_available_datasets(response).iteritems():
@@ -2269,7 +2271,9 @@ class DuoPoBranchesSpider(DuoSpider):
                 if row.has_key('VESTIGINGSNAAM '):
                     row['VESTIGINGSNAAM'] = row['VESTIGINGSNAAM ']
 
-                print row['BRIN NUMMER'] + "\r\n"
+                if row.has_key('BRINNUMMER'):
+                    row['BRIN NUMMER'] = row['BRINNUMMER']
+
                 school['reference_year'] = reference_year
                 school['ignore_id_fields'] = ['reference_year']
                 school['name'] = row['VESTIGINGSNAAM'].strip()

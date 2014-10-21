@@ -1,4 +1,9 @@
-ES_URL = 'localhost:9200'
+import yaml
+
+yaml_stream = open("../config/config.yaml")
+config = yaml.load(yaml_stream)
+
+ES_URL = config['backend']['elasticsearch']['options']['url']
 ES_INDEXES = set(['duo', 'schoolvo', 'onderwijsinspectie'])
 ES_DOCUMENT_TYPES_PER_INDEX = {
     'duo': set(['vo_school', 'vo_branch', 'vo_board', 'po_school', 'po_branch',

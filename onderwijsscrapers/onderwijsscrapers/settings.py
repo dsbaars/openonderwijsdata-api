@@ -1,5 +1,9 @@
 import os
 import exporters
+import yaml
+
+yaml_stream = open("../config/config.yaml")
+config = yaml.load(yaml_stream)
 
 BOT_NAME = 'onderwijsscrapers'
 BOT_VERSION = '1.0'
@@ -57,7 +61,7 @@ EXPORT_METHODS = {
     'elasticsearch': {
         'exporter': exporters.ElasticSearchExporter,
         'options': {
-            'url': '127.0.0.1:9200'
+            'url': 'blackbox:9200'
         }
     }
 }

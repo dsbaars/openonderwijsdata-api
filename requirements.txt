@@ -8,3 +8,4 @@ dateutils
 flask
 Flask-RESTful
 xlrd
+pyyaml
