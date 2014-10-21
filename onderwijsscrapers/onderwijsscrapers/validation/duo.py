@@ -318,7 +318,7 @@ class StudentsByEduType():
     class students_by_edu_type(MappingSchema):
         denomination = general_rules.denomination()
         students = SchemaNode(Int(), title="Number of students")
-        edu_types = SchemaNode(String(), validator=colander.OneOf(['BAO', 'SBAO', 'SO', 'VSO']), title="Edu type, in BAO, SBAO, SO, VSO")
+        edu_types = SchemaNode(String(), validator=colander.OneOf(['BAO', 'SBAO', 'SO', 'VSO', '(V)SO']), title="Edu type, in BAO, SBAO, SO, VSO, (V)SO")
 
 # TODO
 # class StudentsInBRON(MappingSchema):

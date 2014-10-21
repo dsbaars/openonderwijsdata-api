@@ -54,20 +54,12 @@ EXPORT_DIR = os.path.join(PROJECT_ROOT, 'export')
 
 # Available methods are 'elasticsearch' and 'file'
 EXPORT_METHODS = {
-    'file': {
-        'exporter': exporters.FileExporter,
+    'elasticsearch': {
+        'exporter': exporters.ElasticSearchExporter,
         'options': {
-            'export_dir': EXPORT_DIR,
-            'create_tar': True,
-            'remove_json': False
+            'url': '127.0.0.1:9200'
         }
-    },
-    # 'elasticsearch': {
-    #     'exporter': exporters.ElasticSearchExporter,
-    #     'options': {
-    #         'url': '127.0.0.1:9200'
-    #     }
-    # }
+    }
 }
 
 from validation.duo import (DuoVoSchool, DuoVoBoard, DuoVoBranch, DuoPoSchool,
