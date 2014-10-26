@@ -8,11 +8,27 @@
                   {{ i }}
                 </label>
                 <section>
-                    <h5>Type <small>{{ eType }}</small></h5>
-                    <label class="radio"  ng-repeat="t in types">
-                      <input type="radio" value="{{ t }}" name="type" data-toggle="radio"  ng-model="$parent.eType">
-                      {{ t }}
-                    </label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Type <small>{{ eType }}</small></h5>
+                            <label class="radio"  ng-repeat="t in types">
+                              <input type="radio" value="{{ t }}" name="type" data-toggle="radio"  ng-model="$parent.eType">
+                              {{ t }}
+                            </label>
+                        </div>
+                        <div class="col-md-6" ng-show="eIndex == 'duo'">
+                            <h5>Ref. Year</h5>
+                            <input type="text" name="ref_year" placeholder="2014" ng-model="ref_year" class="form-control input-sm">
+                        </div>
+                        <div class="col-md-6" ng-show="eIndex == 'duo'">
+                            <h5>Limit</h5>
+                            <input type="text" name="limit" placeholder="10" ng-model="result_limit" class="form-control input-sm" ng-model-options="{ debounce: 2000 }">
+                            <span class="help-block">Changes intentionally delayed by 2s.</span>
+                            <div class="form-group">
+                                <button ng-click="exportToXLSX()" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-floppy-disk"></span> Export to XLSX</button>
+                            </div>
+                        </div>
+                    </div>
                 </section>
                 <section>
                     <h4>Fields</h4>
@@ -56,6 +72,7 @@
                     </tr>
                 </tbody>
             </table>
+            <p ng-show="results.length"><small>{{ results.length }} out of {{ hits }} shown.</small></p>
         </div>
     </div>
 </div>

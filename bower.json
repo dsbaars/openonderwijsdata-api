@@ -28,6 +28,8 @@
     "angular-ui-router": "~0.2.11",
     "github-fork-ribbon-css": "~0.1.1",
     "elasticsearch": "~2.4.3",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "js-xlsx": "~0.7.11",
+    "FileSaver": "*"
   }
 }
