@@ -3,6 +3,8 @@ from flask.ext import restful
 from flask.ext.restful import abort, reqparse
 import rawes
 import re
+import json
+import pickle
 
 from settings import (ES_URL, ES_INDEXES, ES_DOCUMENT_TYPES_PER_INDEX,
                       ES_DOCUMENT_TYPES, ES_VALIDATION_RESULTS_INDEX)
@@ -11,6 +13,18 @@ app = Flask(__name__)
 api = restful.Api(app)
 
 es = rawes.Elastic(ES_URL)
+
+class PythonObjectEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (list, dict, str, unicode, int, float, bool, type(None))):
+            return json.JSONEncoder.default(self, obj)
+        return {'_python_object': pickle.dumps(obj)}
+
+class SetEncoder(json.JSONEncoder):
+    def default(self, obj):
+       if isinstance(obj, set):
+          return list(obj)
+       return json.JSONEncoder.default(self, obj)
 
 def get_alias_from_index(index_name):
     """ The indexes are named as `alias_suffix` """
@@ -40,142 +54,20 @@ def format_es_search_results(es_results):
 @app.route('/')
 @app.route('/search')
 @app.route('/stats')
-
+@app.route('/export')
 def index():
     counts = {}
 
-    # counts['schoolvo'] = es.get('schoolvo/_search', data={
-    #     "facets": {
-    #         "doc_types": {
-    #             "terms": {"field": "_type"}
-    #         }
-    #     },
-    #     "size": 0
-    # })
-    #
-    # counts['onderwijsinspectie_vo_branches'] = es.get('onderwijsinspectie/vo_branch/_search', data={
-    #     "facets": {
-    #         "doc_types": {
-    #             "terms": {"field": "_type"}
-    #         }
-    #     },
-    #     "size": 0
-    # })
-    #
-    # counts['onderwijsinspectie_po_branches'] = es.get('onderwijsinspectie/po_branch/_search', data={
-    #     "facets": {
-    #         "doc_types": {
-    #             "terms": {"field": "_type"}
-    #         }
-    #     },
-    #     "size": 0
-    # })
-    #
-    # counts['duo_vo_schools'] = es.get('duo/vo_school/_search', data={
-    #     "facets": {
-    #         "years": {
-    #             "terms": {"field": "reference_year", "order": "term"}
-    #         }
-    #     },
-    #     "size": 0
-    # })
-    #
-    # counts['duo_po_schools'] = es.get('duo/po_school/_search', data={
-    #     "facets": {
-    #         "years": {
-    #             "terms": {"field": "reference_year", "order": "term"}
-    #         }
-    #     },
-    #     "size": 0
-    # })
-    #
-    # counts['duo_vo_boards'] = es.get('duo/vo_board/_search', data={
-    #     "facets": {
-    #         "years": {
-    #             "terms": {"field": "reference_year", "order": "term"}
-    #         }
-    #     },
-    #     "size": 0
-    # })
-    #
-    # counts['duo_po_boards'] = es.get('duo/po_board/_search', data={
-    #     "facets": {
-    #         "years": {
-    #             "terms": {"field": "reference_year", "order": "term"}
-    #         }
-    #     },
-    #     "size": 0
-    # })
-    #
-    # counts['duo_vo_branches'] = es.get('duo/vo_branch/_search', data={
-    #     "facets": {
-    #         "years": {
-    #             "terms": {"field": "reference_year", "order": "term"}
-    #         }
-    #     },
-    #     "size": 0
-    # })
-    #
-    # counts['duo_po_branches'] = es.get('duo/po_branch/_search', data={
-    #     "facets": {
-    #         "years": {
-    #             "terms": {"field": "reference_year", "order": "term"}
-    #         }
-    #     },
-    #     "size": 0
-    # })
-    #
-    # counts['duo_pao_collaborations'] = es.get('duo/pao_collaboration/_search', data={
-    #     "facets": {
-    #         "years": {
-    #             "terms": {"field": "reference_year", "order": "term"}
-    #         }
-    #     },
-    #     "size": 0
-    # })
-    #
-    # type_names = {
-    #     'po_board': 'Boards (primary)',
-    #     'vo_board': 'Boards (secondary)',
-    #     'po_school': 'School (primary)',
-    #     'vo_school': 'Schools (secondary)',
-    #     'po_branch': 'School Branches (primary)',
-    #     'vo_branch': 'School Branches (secondary)',
-    #     'pao_collaboration': 'Collaborations (special)'
-    # }
-
     return render_template('index.html')
 
-#
-# @app.route('/search')
-# def simple_search():
-#     # strip_chars = ["/", "\\"]
-#     #
-#     # q = request.args.get('q')
-#     # for char in strip_chars:
-#     #     q = q.replace(char, '')
-#     #
-#     # query = {
-#     #     'query': {
-#     #         'query_string': {
-#     #             'fields': ['name^10', 'address.street', 'address.city',
-#     #                        'address.zip_code' 'municipality', 'wgr_area',
-#     #                        'rmc_region', 'rpa_area', 'province', 'corop_area',
-#     #                        'nodal_area', 'website', 'brin'],
-#     #             'allow_leading_wildcard': False,
-#     #             'query': q
-#     #         }
-#     #     },
-#     #     'size': 20
-#     # }
-#
-#     # es_results = es.get('%s/%s/_search' % (','.join(ES_INDEXES),
-#     #                                        ','.join(ES_DOCUMENT_TYPES)),
-#     #                     data=query)
-#     # hits = format_es_search_results(es_results)
-#
-#     return render_template('index.html')
 
+class Indexes(restful.Resource):
+    def get(self):
+        return list(ES_INDEXES)
+
+class IndexTypes(restful.Resource):
+    def get(self, index):
+        return list(ES_DOCUMENT_TYPES_PER_INDEX[index])
 
 class Search(restful.Resource):
     parser = reqparse.RequestParser()
@@ -382,6 +274,8 @@ class GetValidationResults(restful.Resource):
         print query
         return es.get('%s/_search' % (ES_VALIDATION_RESULTS_INDEX), data=query)
 
+api.add_resource(Indexes, '/api/v1/indexes')
+api.add_resource(IndexTypes, '/api/v1/types/<index>')
 api.add_resource(Search, '/api/v1/search')
 api.add_resource(GetDocument, '/api/v1/get_document/<index>/<doc_type>/<doc_id>')
 api.add_resource(GetValidationResults, '/api/v1/get_validation_results/'

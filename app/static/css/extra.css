@@ -370,3 +370,11 @@ body {
 .input-group-hg.input-group-rounded:focus input {
         border-color: #c0392b;
 }
+
+dd {
+    margin-left: 20px;
+}
+
+.github-fork-ribbon-wrapper.right {
+    position: fixed;
+}

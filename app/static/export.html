@@ -1,0 +1,65 @@
+<div class="container-fluid">
+    <div class="row marketing">
+        <div class="col-md-3">
+            <div class="well">
+                <h5>Index <small>{{ eIndex }}</small></h5>
+                <label class="radio"  ng-repeat="i in indexes">
+                  <input type="radio" value="{{ i }}" name="index" data-toggle="radio" ng-model="$parent.eIndex">
+                  {{ i }}
+                </label>
+                <section>
+                    <h5>Type <small>{{ eType }}</small></h5>
+                    <label class="radio"  ng-repeat="t in types">
+                      <input type="radio" value="{{ t }}" name="type" data-toggle="radio"  ng-model="$parent.eType">
+                      {{ t }}
+                    </label>
+                </section>
+                <section>
+                    <h4>Fields</h4>
+                    <form role="form">
+                        <div ng-repeat="(key, value) in fields | limitTo: 5 track by key" ng-init="key.match('(url|code|date)').length ? false : selectedFields[key]=true">
+                            <div ng-if="value.properties">
+                                <label class="checkbox">
+                                    <input type="checkbox" value=""  disabled>
+                                    {{ key }}
+                                </label>
+                                <dd ng-repeat="(pKey, pValue) in value.properties" ng-init="selectedFields[key]={}">
+                                    <label class="checkbox">
+
+                                        <input type="checkbox" value=""  checked="checked" ng-model="selectedFields[key][pKey]">
+                                        {{ pKey }}
+                                    </label>
+                                </dd>
+                            </div>
+
+                            <label class="checkbox" ng-if="value.type">
+                                <input type="checkbox" value=""  checked="checked"  ng-model="selectedFields[key]">
+                                {{ key }} ({{ value.type }})
+                            </label>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <table class="table table-condensed table-bordered small">
+                <thead>
+                    <tr>
+                        <th ng-repeat="(key, value) in selectedFields" ng-if="value==true">{{ key }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="r in results">
+                        <td ng-repeat="(key, value) in selectedFields" ng-if="value==true" nowrap="nowrap">
+                            <span ng-bind="get(r, key)"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script charset="utf-8">
+    //$('[data-toggle="checkbox"]').radiocheck();
+    $('[data-toggle="radio"]').radiocheck();
+</script>

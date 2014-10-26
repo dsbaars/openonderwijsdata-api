@@ -37,8 +37,9 @@
 		<ul class="nav navbar-nav">
 			<li><a href="/" ui-sref="index">Search</a></li>
 			<li><a ui-sref="stats">Statistics</a></li>
-			<li><a href="#fakelink">About</a></li>
-			<li><a href="#fakelink">API documentation</a></li>
+			<li><a ui-sref="export">Export</a></li>
+<!--			<li><a href="#fakelink">About</a></li>
+			<li><a href="#fakelink">API documentation</a></li> -->
 		</ul>
 	</div>
 <!-- /.navbar-collapse --></nav>
@@ -52,10 +53,12 @@
 
 	</div>
 	<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="/static/bower_components/lodash/dist/lodash.compat.js"></script>
 	<script src="/static/js/flat-ui.min.js"></script>
 	<script src="/static/bower_components/pace/pace.js"></script>
 	<script src="/static/bower_components/angular/angular.js"></script>
 	<script src="/static/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="/static/bower_components/elasticsearch/elasticsearch.angular.min.js"></script>
 	<script src="/static/js/ooa.js"></script>
 	<script charset="utf-8">
 
