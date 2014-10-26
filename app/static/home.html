@@ -1,0 +1,79 @@
+<div class="container">
+    <div class="demo-headline">
+        <h1 class="demo-logo">
+            Open Onderwijs API
+        </h1>
+    </div> <!-- /demo-headline -->
+
+    <form class="form" role="form" ng-submit="onFormSubmit()">
+        <div class="row">
+            <div class="input-group input-group-hg input-group-rounded">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn"><span class="fui-search"></span></button>
+                </span>
+                <input type="search" name="q"  autofocus ng-model="query" class="input-lg form-control search-query" placeholder="Enter a name, city, postal code or BRIN">
+            </div>
+        </div>
+
+                <div class="row">
+            <div class="col-xs-4">
+                <h3 class="demo-panel-title">Indexes</h3>
+                <label class="checkbox" for="checkbox1">
+                    <input type="checkbox" value="" id="checkbox1" data-toggle="checkbox" checked="checked">
+                    DUO
+                </label>
+                <label class="checkbox" for="checkbox2">
+                    <input type="checkbox" value="" id="checkbox2" data-toggle="checkbox" checked="checked">
+                    Onderwijsinspectie
+                </label>
+                <label class="checkbox" for="checkbox3">
+                    <input type="checkbox" value="" id="checkbox3" data-toggle="checkbox" checked="checked">
+                    Venster voor verantwoording
+                </label>
+            </div>
+            <div class="col-xs-4">
+                <h3 class="demo-panel-title">Types</h3>
+                <label class="checkbox" for="checkbox_po">
+                    <input type="checkbox" value="" id="checkbox_po" data-toggle="checkbox" checked="checked">
+                    Primary Education <a href="#">more options</a>
+                </label>
+                <label class="checkbox" for="checkbox_vo">
+                    <input type="checkbox" value="" id="checkbox_vo" data-toggle="checkbox" checked="checked">
+                    Secondary Education <a href="#">more options</a>
+                </label>
+            </div>
+            <div class="col-xs-4">
+                <h3 class="demo-panel-title">Filter</h3>
+                <div id="sliderYear"></div>
+                 <p class="small">
+                     <label for="years">Reference year:</label>
+                     <input type="text" id="range" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                 </p>
+            </div>
+        </div>
+    </form>
+</div>
+
+    <script>
+            // Checkboxes and Radio buttons
+    $('[data-toggle="checkbox"]').radiocheck();
+    $('[data-toggle="radio"]').radiocheck();
+
+
+      var $slider = $("#sliderYear");
+        if ($slider.length > 0) {
+          $slider.slider({
+              range: true,
+              min: 2009,
+              max: 2014,
+              values: [2009, 2014],
+              orientation: "horizontal",
+              slide: function( event, ui ) {
+            $( "#range" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+          }
+        });
+
+        $( "#range" ).val( $slider.slider( "values", 0 ) + " - " + $slider.slider( "values", 1 ) );
+
+        }
+    </script>

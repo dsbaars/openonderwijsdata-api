@@ -38,140 +38,143 @@ def format_es_search_results(es_results):
 
 
 @app.route('/')
+@app.route('/search')
+@app.route('/stats')
+
 def index():
     counts = {}
 
-    counts['schoolvo'] = es.get('schoolvo/_search', data={
-        "facets": {
-            "doc_types": {
-                "terms": {"field": "_type"}
-            }
-        },
-        "size": 0
-    })
+    # counts['schoolvo'] = es.get('schoolvo/_search', data={
+    #     "facets": {
+    #         "doc_types": {
+    #             "terms": {"field": "_type"}
+    #         }
+    #     },
+    #     "size": 0
+    # })
+    #
+    # counts['onderwijsinspectie_vo_branches'] = es.get('onderwijsinspectie/vo_branch/_search', data={
+    #     "facets": {
+    #         "doc_types": {
+    #             "terms": {"field": "_type"}
+    #         }
+    #     },
+    #     "size": 0
+    # })
+    #
+    # counts['onderwijsinspectie_po_branches'] = es.get('onderwijsinspectie/po_branch/_search', data={
+    #     "facets": {
+    #         "doc_types": {
+    #             "terms": {"field": "_type"}
+    #         }
+    #     },
+    #     "size": 0
+    # })
+    #
+    # counts['duo_vo_schools'] = es.get('duo/vo_school/_search', data={
+    #     "facets": {
+    #         "years": {
+    #             "terms": {"field": "reference_year", "order": "term"}
+    #         }
+    #     },
+    #     "size": 0
+    # })
+    #
+    # counts['duo_po_schools'] = es.get('duo/po_school/_search', data={
+    #     "facets": {
+    #         "years": {
+    #             "terms": {"field": "reference_year", "order": "term"}
+    #         }
+    #     },
+    #     "size": 0
+    # })
+    #
+    # counts['duo_vo_boards'] = es.get('duo/vo_board/_search', data={
+    #     "facets": {
+    #         "years": {
+    #             "terms": {"field": "reference_year", "order": "term"}
+    #         }
+    #     },
+    #     "size": 0
+    # })
+    #
+    # counts['duo_po_boards'] = es.get('duo/po_board/_search', data={
+    #     "facets": {
+    #         "years": {
+    #             "terms": {"field": "reference_year", "order": "term"}
+    #         }
+    #     },
+    #     "size": 0
+    # })
+    #
+    # counts['duo_vo_branches'] = es.get('duo/vo_branch/_search', data={
+    #     "facets": {
+    #         "years": {
+    #             "terms": {"field": "reference_year", "order": "term"}
+    #         }
+    #     },
+    #     "size": 0
+    # })
+    #
+    # counts['duo_po_branches'] = es.get('duo/po_branch/_search', data={
+    #     "facets": {
+    #         "years": {
+    #             "terms": {"field": "reference_year", "order": "term"}
+    #         }
+    #     },
+    #     "size": 0
+    # })
+    #
+    # counts['duo_pao_collaborations'] = es.get('duo/pao_collaboration/_search', data={
+    #     "facets": {
+    #         "years": {
+    #             "terms": {"field": "reference_year", "order": "term"}
+    #         }
+    #     },
+    #     "size": 0
+    # })
+    #
+    # type_names = {
+    #     'po_board': 'Boards (primary)',
+    #     'vo_board': 'Boards (secondary)',
+    #     'po_school': 'School (primary)',
+    #     'vo_school': 'Schools (secondary)',
+    #     'po_branch': 'School Branches (primary)',
+    #     'vo_branch': 'School Branches (secondary)',
+    #     'pao_collaboration': 'Collaborations (special)'
+    # }
 
-    counts['onderwijsinspectie_vo_branches'] = es.get('onderwijsinspectie/vo_branch/_search', data={
-        "facets": {
-            "doc_types": {
-                "terms": {"field": "_type"}
-            }
-        },
-        "size": 0
-    })
+    return render_template('index.html')
 
-    counts['onderwijsinspectie_po_branches'] = es.get('onderwijsinspectie/po_branch/_search', data={
-        "facets": {
-            "doc_types": {
-                "terms": {"field": "_type"}
-            }
-        },
-        "size": 0
-    })
-
-    counts['duo_vo_schools'] = es.get('duo/vo_school/_search', data={
-        "facets": {
-            "years": {
-                "terms": {"field": "reference_year", "order": "term"}
-            }
-        },
-        "size": 0
-    })
-
-    counts['duo_po_schools'] = es.get('duo/po_school/_search', data={
-        "facets": {
-            "years": {
-                "terms": {"field": "reference_year", "order": "term"}
-            }
-        },
-        "size": 0
-    })
-
-    counts['duo_vo_boards'] = es.get('duo/vo_board/_search', data={
-        "facets": {
-            "years": {
-                "terms": {"field": "reference_year", "order": "term"}
-            }
-        },
-        "size": 0
-    })
-
-    counts['duo_po_boards'] = es.get('duo/po_board/_search', data={
-        "facets": {
-            "years": {
-                "terms": {"field": "reference_year", "order": "term"}
-            }
-        },
-        "size": 0
-    })
-
-    counts['duo_vo_branches'] = es.get('duo/vo_branch/_search', data={
-        "facets": {
-            "years": {
-                "terms": {"field": "reference_year", "order": "term"}
-            }
-        },
-        "size": 0
-    })
-
-    counts['duo_po_branches'] = es.get('duo/po_branch/_search', data={
-        "facets": {
-            "years": {
-                "terms": {"field": "reference_year", "order": "term"}
-            }
-        },
-        "size": 0
-    })
-
-    counts['duo_pao_collaborations'] = es.get('duo/pao_collaboration/_search', data={
-        "facets": {
-            "years": {
-                "terms": {"field": "reference_year", "order": "term"}
-            }
-        },
-        "size": 0
-    })
-
-    type_names = {
-        'po_board': 'Boards (primary)',
-        'vo_board': 'Boards (secondary)',
-        'po_school': 'School (primary)',
-        'vo_school': 'Schools (secondary)',
-        'po_branch': 'School Branches (primary)',
-        'vo_branch': 'School Branches (secondary)',
-        'pao_collaboration': 'Collaborations (special)'
-    }
-
-    return render_template('index.html', counts=counts, type_names=type_names)
-
-
-@app.route('/search')
-def simple_search():
-    strip_chars = ["/", "\\"]
-
-    q = request.args.get('q')
-    for char in strip_chars:
-        q = q.replace(char, '')
-
-    query = {
-        'query': {
-            'query_string': {
-                'fields': ['name^10', 'address.street', 'address.city',
-                           'address.zip_code' 'municipality', 'wgr_area',
-                           'rmc_region', 'rpa_area', 'province', 'corop_area',
-                           'nodal_area', 'website', 'brin'],
-                'allow_leading_wildcard': False,
-                'query': q
-            }
-        },
-        'size': 20
-    }
-
-    es_results = es.get('%s/%s/_search' % (','.join(ES_INDEXES),
-                                           ','.join(ES_DOCUMENT_TYPES)),
-                        data=query)
-    hits = format_es_search_results(es_results)
-
-    return render_template('search.html', hits=hits)
+#
+# @app.route('/search')
+# def simple_search():
+#     # strip_chars = ["/", "\\"]
+#     #
+#     # q = request.args.get('q')
+#     # for char in strip_chars:
+#     #     q = q.replace(char, '')
+#     #
+#     # query = {
+#     #     'query': {
+#     #         'query_string': {
+#     #             'fields': ['name^10', 'address.street', 'address.city',
+#     #                        'address.zip_code' 'municipality', 'wgr_area',
+#     #                        'rmc_region', 'rpa_area', 'province', 'corop_area',
+#     #                        'nodal_area', 'website', 'brin'],
+#     #             'allow_leading_wildcard': False,
+#     #             'query': q
+#     #         }
+#     #     },
+#     #     'size': 20
+#     # }
+#
+#     # es_results = es.get('%s/%s/_search' % (','.join(ES_INDEXES),
+#     #                                        ','.join(ES_DOCUMENT_TYPES)),
+#     #                     data=query)
+#     # hits = format_es_search_results(es_results)
+#
+#     return render_template('index.html')
 
 
 class Search(restful.Resource):
@@ -336,7 +339,7 @@ class GetDocument(restful.Resource):
         if doc_type not in ES_DOCUMENT_TYPES_PER_INDEX[index]:
             abort(400, message='Doctype "%s" does not exist in index "%s"'
                                % (doc_type, index))
- 
+
         try:
             doc = es.get('%s/%s/%s' % (index, doc_type, doc_id))
         except rawes.elastic_exception.ElasticException, error:

@@ -1,0 +1,45 @@
+<div class="container">
+    <form role="form"  ng-submit="onFormSubmit()">
+        <div class="input-group">
+            <input name="q" ng-model="query" type="search" placeholder="Enter a name, place, zip code or BRIN" class="form-control search-query">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Search</button>
+            </span>
+        </div>
+    </form>
+    <p><small>Found {{ total }} documents in {{ took }} ms.</small></p>
+    <table class="table table-striped table-condensed small">
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Type</th>
+                <th>BRIN</th>
+                <th nowrap>Board ID</th>
+                <th nowrap>Branch ID</th>
+                <th></th>
+                <th nowrap>Ref. year</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="hit in results">
+                <td>{{ hit['_index'] }}</td>
+                <td>{{ hit['_type'] }}</td>
+                <td>{{ hit['_source'].brin }}</td>
+                <td>{{ hit['_source'].board_id }}</td>
+                <td>{{ hit['_source'].branch_id }}</td>
+                <td>
+                    <address>
+                        <strong ng-if="hit['_source']"><a ng-href="/api/v1/get_document/{{ hit['_index'] }}/{{ hit['_type'] }}/{{ hit['_id'] }}" target="_blank">{{ hit['_source'].name }}</a></strong>
+                        <strong ng-if="!hit['_source']"><a ng-href="/api/v1/get_document/{{ hit['_index'] }}/{{ hit['_type'] }}/{{ hit['_id'] }}" target="_blank">{{ hit['_index'] }}/{{ hit['_type'] }}/{{ hit['_id'] }}</a></strong>
+                        <br>
+                        <span ng-if="hit['_source'].address">
+                            {{ hit['_source'].address.street }}<br>
+                            {{ hit['_source'].address.zip_code }} {{ hit['_source'].address.city }}<br>
+                        </span>
+                    </address>
+                </td>
+                <td>{{ hit['_source'].reference_year }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

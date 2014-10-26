@@ -1,7 +1,20 @@
 {% extends "base.html" %}
 
 {% block main %}
-Found {{ hits.total }} documents in {{ hits.took }}ms. {% if hits.total > 20 %}Showing 20 documents.{% endif %}
+<section ng-controller="SearchCtrl">
+	<div class="">
+		<form role="form" action="/search" method="GET">
+			<div class="input-group">
+				<input name="q" type="search" placeholder="Enter a name, place, zip code or BRIN" class="form-control search-query">
+				<span class="input-group-btn">
+					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Search</button>
+				</span>
+			</div>
+		</form>
+	</div>
+{% raw %}
+<small>Found {{ total }} documents in {{ took }} ms.</small>
+{% endraw %}
 <table class="table table-striped table-condensed">
 	<thead>
 		<tr>
@@ -14,9 +27,9 @@ Found {{ hits.total }} documents in {{ hits.took }}ms. {% if hits.total > 20 %}S
 			<th>Ref. year</th>
 		</tr>
 	</thead>
+	{% raw %}
 	<tbody>
-	{% for hit in hits['hits'] %}
-		<tr>
+		<tr ng-repeat="hit in results">
 			<td>{{ hit['_index'] }}</td>
 			<td>{{ hit['_type'] }}</td>
 			<td>{{ hit['_source'].brin }}</td>
@@ -24,20 +37,19 @@ Found {{ hits.total }} documents in {{ hits.took }}ms. {% if hits.total > 20 %}S
 			<td>{{ hit['_source'].branch_id }}</td>
 			<td>
 				<address>
-				{% if 'name' in hit['_source'] %}
-					<strong><a href="/api/v1/get_document/{{ hit['_index'] }}/{{ hit['_type'] }}/{{ hit['_id'] }}" target="_blank">{{ hit['_source'].name }}</a></strong><br>
-				{% else %}
-					<strong><a href="/api/v1/get_document/{{ hit['_index'] }}/{{ hit['_type'] }}/{{ hit['_id'] }}" target="_blank">{{ hit['_index'] }}/{{ hit['_type'] }}/{{ hit['_id'] }}</a></strong><br>
-				{% endif %}
-				{% if 'address' in hit['_source'] %}
+					<strong ng-if="hit['_source']"><a ng-href="/api/v1/get_document/{{ hit['_index'] }}/{{ hit['_type'] }}/{{ hit['_id'] }}" target="_blank">{{ hit['_source'].name }}</a></strong>
+					<strong ng-if="!hit['_source']"><a ng-href="/api/v1/get_document/{{ hit['_index'] }}/{{ hit['_type'] }}/{{ hit['_id'] }}" target="_blank">{{ hit['_index'] }}/{{ hit['_type'] }}/{{ hit['_id'] }}</a></strong>
+					<br>
+				<span ng-if="hit['_source'].address">
 					{{ hit['_source'].address.street }}<br>
 					{{ hit['_source'].address.zip_code }} {{ hit['_source'].address.city }}<br>
-				{% endif %}
+				</span>
 				</address>
 			</td>
 			<td>{{ hit['_source'].reference_year }}</td>
 		</tr>
-	{% endfor %}
 	</tbody>
+	{% endraw %}
 </table>
+</section>
 {% endblock %}
