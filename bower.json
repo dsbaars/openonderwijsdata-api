@@ -30,6 +30,11 @@
     "elasticsearch": "~2.4.3",
     "lodash": "~2.4.1",
     "js-xlsx": "~0.7.11",
-    "FileSaver": "*"
+    "FileSaver": "*",
+    "angular-xml": "~1.0.5",
+    "ngFileReader": "~0.0.5"
+  },
+  "resolutions": {
+    "angular": "1.3.0"
   }
 }

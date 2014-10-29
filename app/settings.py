@@ -1,7 +1,7 @@
-ES_URL = 'blackbox:9200'
-ES_INDEXES = set(['duo', 'schoolvo', 'onderwijsinspectie'])
+ES_URL = 'localhost:9200'
+ES_INDEXES = set(['duo2', 'schoolvo', 'onderwijsinspectie'])
 ES_DOCUMENT_TYPES_PER_INDEX = {
-    'duo': set(['vo_school', 'vo_branch', 'vo_board', 'po_school', 'po_branch',
+    'duo2': set(['vo_school', 'vo_branch', 'vo_board', 'po_school', 'po_branch',
                 'po_board', 'pao_collaboration']),
     'schoolvo': set(['vo_branch']),
     'onderwijsinspectie': set(['vo_branch', 'po_branch'])

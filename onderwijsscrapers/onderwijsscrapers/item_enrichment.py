@@ -1,7 +1,7 @@
 from time import sleep
 
 from scrapy import log
-import requests
+import httplib, urllib,json, requests
 
 
 def bag42_geocode(address):
@@ -14,21 +14,32 @@ def bag42_geocode(address):
     payload = []
     for field in address_fields:
         if field in address and address[field] is not None:
-            payload.append(address[field])
+            payload.append(urllib.quote(address[field]))
 
+    payload_data = "address=" + ';'.join(payload)
+    print payload_data
     try:
-        resp = requests.get('http://bag42.nl/api/v0/geocode/json',
-                            params={'address': ' '.join(payload)})
+        conn = httplib.HTTPConnection('bag42.nl')
+        conn.request('GET', "/api/v0/geocode/json?" + payload_data)
+        resp = conn.getresponse()
+    #    print resp.getheaders()
     except requests.exceptions.ConnectionError:
         sleep(2)
-        resp = requests.get('http://bag42.nl/api/v0/geocode/json',
-                            params={'address': ' '.join(payload)})
+        conn = httplib.HTTPConnection('bag42.nl')
+        conn.request('GET', "/api/v0/geocode/json", payload_data)
+
+        resp = conn.getresponse()
+
+    #print resp.url;
 
     try:
-        result = resp.json()
+        #print resp.read()
+        result = json.loads(resp.read())
+        conn.close()
+
     except:
-        print resp.text
-        log.msg('Unable to decode JSON object: %s' % resp.text, level=log.ERROR)
+        #print resp.text
+        log.msg('Unable to decode JSON object: %s' % resp.read(), level=log.ERROR)
         return None
     if result['status'] != 'OK':
         log.msg('Unable to geocode address %s' % address, level=log.WARNING)

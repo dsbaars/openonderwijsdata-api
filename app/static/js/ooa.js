@@ -1,7 +1,5 @@
-'use strict';
-
 // Declare app level module which depends on views, and components
-angular.module('myApp', ['ui.router', 'elasticsearch'], function($stateProvider, $urlRouterProvider, $locationProvider) {
+angular.module('myApp', ['ui.router', 'elasticsearch', 'ngFileReader'], function($stateProvider, $urlRouterProvider, $locationProvider) {
     $urlRouterProvider.otherwise("/");
     $locationProvider.html5Mode(true);
 });
@@ -30,6 +28,12 @@ angular.module('myApp').config(function($stateProvider, $urlRouterProvider) {
         url: "/export",
         templateUrl: "static/export.html",
         controller: 'ExportCtrl'
+
+    })
+    .state('match', {
+        url: "/match",
+        templateUrl: "static/match.html",
+        controller: 'MatchCtrl'
 
     })
     .state('search', {
@@ -123,17 +127,23 @@ angular.module('myApp').controller('HomeCtrl', ['$scope', '$http', '$state', fun
                     },
                     filter: {
                         bool: {
-                            must: {
-                                term: {
-                                    reference_year: $scope.ref_year
+                            must: [{
+                                "term":{
+                                    "education_structures" : "VWO"
                                 }
-
+                            }, {
+                                "term":
+                                    {
+                                        "reference_year":"2014"
+                                    }
+                                }
+                                ]
                             }
+
                         }
 
 
                     }
-                }
             }, function(err, resp) {
                 $scope.results = resp.hits.hits;
                 $scope.hits = resp.hits.total;

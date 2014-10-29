@@ -1,0 +1,15 @@
+<div class="well">
+    <div ng-file-reader on-readed="onReaded( event, file )" read-method="readMethod"  multiple></div>
+    <table class="table table-condensed small">
+        <tr ng-repeat="i in process">
+            <td>{{ i.origin.naam }}</td>
+        <!--    <td>{{ i.origin.positie.zoom }} {{ i.origin.positie.lat }} {{ i.origin.positie.lng }}</td>-->
+            <td>{{ i.match._source.brin }}</td>
+            <td>{{ i.match._source.branch_id }}</td>
+            <td>{{ i.match._source.board_id }}</td>
+            <td>{{ i.match._source.name }}</td>
+            <td>{{ i.match._source.education_structures.join(',') }}</td>
+            <td>{{ i.match._source.address.city }}</td>
+        </tr>
+    </table>
+</div>

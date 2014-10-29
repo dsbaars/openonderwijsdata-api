@@ -55,6 +55,8 @@ def format_es_search_results(es_results):
 @app.route('/search')
 @app.route('/stats')
 @app.route('/export')
+@app.route('/match')
+
 def index():
     counts = {}
 
