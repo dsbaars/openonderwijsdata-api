@@ -8,3 +8,9 @@ dateutils
 flask
 Flask-RESTful
 xlrd
+twisted
+lxml
+w3lib
+cryptography
+uwsgi
+cssselect
