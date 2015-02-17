@@ -25,3 +25,189 @@ elasticsearch:
             - po_branch
         ocw:
             - po_branch
+scraper:
+    scrapy:
+        autothrottle_enabled: true
+        autothrottle_debug: true
+    origins: ~
+    export_methods:
+        file:
+            enabled: false
+            options:
+                export_dir: "%PROJECT_ROOT%/export"
+                create_tar: true
+                remove_json: false
+        elasticsearch:
+            enabled: true
+            options:
+                url: localhost:9200
+    origins:
+        ARUBA: aruba
+        DE MOLUKSE EILANDEN: maluku_islands
+        GIEKENLAND: greece
+        ITALIE: italy
+        KAAPVERDIE: cape_verde
+        MAROKKO: morocco
+        NEDERLANDSE ANTILLEN: netherlands_antilles
+        NIET-ENGELSTALIGEN: non_english_speaking_countries
+        PORTUGAL: portugal
+        SPANJE: spain
+        SURINAME: suriname
+        TUNESIE: tunisia
+        TURKIJE: turkey
+        VLUCHTELINGEN: refugees
+        VML.JOEGOSLAVIE: former_yugoslavia
+    sources:
+        'po.owinsp.nl':
+            validate: true
+            schema: OnderwijsInspectiePoBranch
+            validation_index: onderwijsdata_validation
+            geocode: false
+            geocode_fields: ['address']
+            index: onderwijsinspectie
+            doctype: po_branch
+            id_fields: ['owinsp_id', 'brin']
+        'vo.owinsp.nl':
+            validate: true
+            schema: OnderwijsInspectieVoBranch
+            validation_index: onderwijsdata_validation
+            geocode: false
+            geocode_fields: ['address']
+            index: onderwijsinspectie
+            doctype: vo_branch
+            id_fields: ['brin', 'branch_id']
+        schoolvo.nl:
+            validate: true
+            schema: SchoolVOBranch
+            validation_index: onderwijsdata_validation
+            geocode: true
+            geocode_fields: ['address']
+            index: schoolvo
+            doctype: vo_branch
+            id_fields: ['brin', 'branch_id']
+        duo_vo_branches:
+            validate: true
+            schema: DuoVoBranch
+            validation_index: 'onderwijsdata_validation'
+            geocode: true
+            geocode_fields: ['address']
+            index: 'duo'
+            doctype: 'vo_branch'
+            id_fields: ['reference_year', 'brin', 'branch_id']
+        duo_vo_boards:
+            validate: true
+            schema: DuoVoBoard
+            validation_index: 'onderwijsdata_validation'
+            geocode: true
+            geocode_fields: ['address', 'correspondence_address']
+            index: 'duo'
+            doctype: 'vo_board'
+            id_fields: ['reference_year', 'board_id']
+        duo_vo_schools:
+            validate: true
+            schema: DuoVoSchool
+            validation_index: onderwijsdata_validation
+            geocode: true
+            geocode_fields: [address, correspondence_address]
+            index: duo
+            doctype: vo_school
+            id_fields: [reference_year, brin]
+        duo_po_boards:
+            validate: true
+            schema: DuoPoBoard
+            validation_index: onderwijsdata_validation
+            geocode: true
+            geocode_fields: [address, correspondence_address]
+            index: duo
+            doctype: po_board
+            id_fields: [reference_year, board_id]
+        duo_po_schools:
+            validate: true
+            schema: DuoPoSchool
+            validation_index: onderwijsdata_validation
+            geocode: true
+            geocode_fields: [address, correspondence_address]
+            index: duo
+            doctype: po_school
+            id_fields: [reference_year, brin]
+        duo_po_branches:
+            validate: true
+            schema: DuoPoBranch
+            validation_index: onderwijsdata_validation
+            geocode: false
+            geocode_fields: [address, correspondence_address]
+            index: duo
+            doctype: po_branch
+            id_fields: [reference_year, brin, branch_id]
+        duo_pao_collaborations:
+            validate: true
+            schema: DuoPaoCollaboration
+            validation_index: onderwijsdata_validation
+            geocode: false
+            geocode_fields: [address, correspondence_address]
+            index: duo
+            doctype: pao_collaboration
+            id_fields: [reference_year, collaboration_id]
+        duo_mbo_boards:
+            validate: true
+            schema: DuoMboBoard
+            validation_index: onderwijsdata_validation
+            geocode: false
+            geocode_fields: [address, correspondence_address]
+            index: duo
+            doctype: mbo_board
+            id_fields: [reference_year, board_id]
+        duo_mbo_institutions:
+            validate: true
+            schema: DuoMboInstitution
+            validation_index: onderwijsdata_validation
+            geocode: false
+            geocode_fields: [address, correspondence_address]
+            index: duo
+            doctype: mbo_institution
+            id_fields: [reference_year, brin]
+        duo_ho_boards:
+            validate: true
+            schema: DuoHoBoard
+            validation_index: onderwijsdata_validation
+            geocode: false
+            geocode_fields: [address, correspondence_address]
+            index: duo
+            doctype: ho_board
+            id_fields: [reference_year, board_id]
+        duo_ho_institutions:
+            validate: true
+            schema: DuoHoInstitution
+            validation_index: onderwijsdata_validation
+            geocode: false
+            geocode_fields: [address, correspondence_address]
+            index: duo
+            doctype: ho_institution
+            id_fields: [reference_year, brin]
+        ocw_po_branches:
+            validate: false
+            schema: OCWPoBranch
+            validation_index: onderwijsdata_validation
+            geocode: false
+            geocode_fields: [address]
+            index: ocw
+            doctype: po_branch
+            id_fields: [reference_year, brin, branch_id]
+        dans_vo_branches:
+            validate: false
+            schema: None
+            validation_index: onderwijsdata_validation
+            geocode: false
+            geocode_fields: []
+            index: dans
+            doctype: vo_branch
+            id_fields: [brin, branch_id]
+        roa_surveys:
+            validate: false
+            schema: None
+            validation_index: onderwijsdata_validation
+            geocode: false
+            geocode_fields: []
+            index: roa
+            doctype: survey
+            id_fields: [code]
