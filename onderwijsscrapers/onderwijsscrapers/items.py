@@ -11,6 +11,7 @@ SchoolVOItem = FlexibleItem
 OwinspVOSchool = FlexibleItem
 OwinspPOSchool = FlexibleItem
 
+# DUO Institutions, schools, boards and branches
 DuoVoBranch = FlexibleItem
 DuoVoSchool = FlexibleItem
 DuoVoBoard = FlexibleItem
@@ -23,6 +24,14 @@ DuoMboInstitution = FlexibleItem
 DuoHoBoard = FlexibleItem
 DuoHoInstitution = FlexibleItem
 
+# Other Branches
 OCWPoBranch = FlexibleItem
 DANSVoBranch = FlexibleItem
 ROASurvey = FlexibleItem
+
+# DUO Education programmes
+DuoHoProgramme = FlexibleItem
+DuoMboProgramme = FlexibleItem
+
+# HODEX
+HodexHoProgramme = FlexibleItem

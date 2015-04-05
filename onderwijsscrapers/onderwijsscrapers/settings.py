@@ -56,20 +56,20 @@ EXPORT_DIR = os.path.join(PROJECT_ROOT, 'export')
 
 # Available methods are 'elasticsearch' and 'file'
 EXPORT_METHODS = {
-    'file': {
-        'exporter': exporters.FileExporter,
-        'options': {
-            'export_dir': EXPORT_DIR,
-            'create_tar': True,
-            'remove_json': False
-        }
-    },
-    # 'elasticsearch': {
-    #     'exporter': exporters.ElasticSearchExporter,
+    # 'file': {
+    #     'exporter': exporters.FileExporter,
     #     'options': {
-    #         'url': '127.0.0.1:9200'
+    #         'export_dir': EXPORT_DIR,
+    #         'create_tar': True,
+    #         'remove_json': False
     #     }
-    # }
+    # },
+    'elasticsearch': {
+        'exporter': exporters.ElasticSearchExporter,
+        'options': {
+            'url': '127.0.0.1:9200'
+        }
+    }
 }
 
 from validation.duo import (DuoVoSchool, DuoVoBoard, DuoVoBranch, DuoPoSchool,
@@ -79,8 +79,19 @@ from validation.duo import (DuoVoSchool, DuoVoBoard, DuoVoBranch, DuoPoSchool,
 from validation.schoolvo import SchoolVOBranch
 from validation.owinsp import (OnderwijsInspectieVoBranch, OnderwijsInspectiePoBranch)
 from validation.ocw import OCWPoBranch
+from validation.hodex import HodexHoProgramme
+
 
 EXPORT_SETTINGS = {
+    'hodex': {
+        'validate': True,
+        'schema': HodexHoProgramme,
+        'geocode': False,
+        'geocode_fields': [],
+        'index': 'hodex',
+        'doctype': 'ho_programme',
+        'id_fields': ['croho']
+    },
     'po.owinsp.nl': {
         'validate': True,
         'schema': OnderwijsInspectiePoBranch,
